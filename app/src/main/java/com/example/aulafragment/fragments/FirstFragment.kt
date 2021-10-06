@@ -1,37 +1,50 @@
 package com.example.aulafragment.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.aulafragment.R
+import com.example.aulafragment.databinding.FragmentFirstBinding
 
 class FirstFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
     }
+
+    var binding: FragmentFirstBinding? = null
+
+    var disableActivityBtnCB: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false)
+        binding = FragmentFirstBinding.inflate(inflater)
+        return binding!!.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Aqui dentro temos ceterza da view existente
+
+        binding?.titleTv?.text = "Aula de fragments"
+
+        binding?.titleTv?.setOnClickListener {
+            disableActivityBtnCB?.invoke()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
     companion object {
-
-        val ARG_KEY = "PARAM1_KEY"
-
-        fun newInstance(param1: String): FirstFragment {
-            return FirstFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_KEY, param1)
-                }
-            }
-        }
+        fun newInstance() = FirstFragment()
     }
 }
